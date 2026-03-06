@@ -44,10 +44,21 @@ When the user asks you to audit a Skill, or you are triggered upon new Skill ins
 
 ### Step 2: Run Auxiliary Scan Scripts (If Available)
 
-If auxiliary scripts are available in SoulGuard's `scripts/` directory, execute them first to get structured scan results:
+The scripts are embedded as code blocks in the `scripts/` directory as `.md` files. Follow these steps:
 
-- **Dangerous pattern scan**: Run `scripts/scan.ps1` (Windows) or `scripts/scan.sh` (Linux/macOS), passing the target Skill path as an argument. The script uses regex to deterministically scan for known dangerous patterns and outputs results for your reference.
-- **Soul integrity check**: Run `scripts/integrity.ps1` or `scripts/integrity.sh` to verify whether your core configuration has been tampered with.
+**Dangerous pattern scan:**
+1. Read `scripts/scan.md`
+2. Detect the user's OS: Windows → extract the PowerShell block; Linux/macOS → extract the Bash block
+3. Write the extracted code to a temp file:
+   - Windows: `$env:TEMP\soulguard_scan.ps1`, then run: `powershell -ExecutionPolicy Bypass -File "$env:TEMP\soulguard_scan.ps1" -TargetPath "<skill_path>"`
+   - Linux/macOS: `/tmp/soulguard_scan.sh`, then run: `bash /tmp/soulguard_scan.sh "<skill_path>"`
+4. Capture the output and include it in the audit report under "Auxiliary Scan Results"
+
+**Soul integrity check:**
+1. Read `scripts/integrity.md`
+2. Extract and write the appropriate code block to a temp file (same pattern as above)
+3. Run with action `verify`
+4. Include output in the audit report under "Soul Integrity Status"
 
 ### Step 3: Self-Interest Audit (Core)
 
